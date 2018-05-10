@@ -10,13 +10,23 @@
       <div class="page-header text-center">
           <h1 class="app-name"> todos app</h1>
       </div>
+      <div class=" add-todo-item">
+      <button class="btn btn-info"   @click="showAddTodo= !showAddTodo;">
+          <span class="glyphicon glyphicon-plus"  v-show="!showAddTodo" v-cloak></span>
+          <span v-show="!showAddTodo" v-cloak> Add a todo</span>
 
-       <input class="new-todo input-lg"
-       type='text'
-          autofocus autocomplete="off"
-          placeholder="Add a todo item "
-          v-model="newTodo"
-          @keyup.enter="addTodo" >
+          <span  v-show="showAddTodo" v-cloak> Cancel </span>
+
+      </button>
+      <input class="new-todo add-todo-item input-lg"
+         type='text'
+         v-show="showAddTodo" v-cloak
+         autofocus autocomplete="off"
+         placeholder="Add a todo item "
+         v-model="newTodo"
+         @keyup.enter="addTodo" >
+
+      </div>
 
           <nav class="navbar navbar-inverse">
             <div class="container-fluid">
@@ -34,7 +44,7 @@
             </div>
           </nav>
           <div class="">
-            <div class= "todo-list-item">
+            <div class= "todo-list-item" v-show="option == 'All'" v-cloak>
                   <input type="checkbox" value="111" @click="changeAllStatusTodo" v-model="selectAll"> Mark all todos completed
           </div>
               <div class="text-center" v-show="!todosItems.length" v-cloak> No item to display </div>
@@ -72,18 +82,12 @@ export default {
   data () {
     return {
       newTodo: '',
-      todos: [
-      {id: 0, text: 'Buy a Pen', isCompleted: true},
-      {id: 1, text: 'Drink milk', isCompleted: true},
-      {id: 2, text: 'goto to cinema', isCompleted: true},
-      {id: 3, text: 'goto to park', isCompleted: false},
-      {id: 4, text: 'call home', isCompleted: false}
-
-      ],
+      todos: [],
       selectAll: false,
       option:'All',
       errors:[],
      todosItems:[],
+     showAddTodo:false,
     }
   },
 created(){
@@ -119,6 +123,7 @@ created(){
         this.todos.push({id: this.count, text: this.newTodo, isCompleted: false});
         this.newTodo = '';
         this.count++;
+        this.showAddTodo = false;
         this.setTodosList();
   },
   removeTodo(todoItem){
@@ -128,7 +133,12 @@ created(){
 
     },
   changeAllStatusTodo(){
-          this.todos.forEach( tododItem => tododItem.isCompleted = true);
+          if(!this.selectAll){
+              this.todos.forEach( tododItem => tododItem.isCompleted = true);
+          }
+          else{
+              this.todos.forEach( tododItem => tododItem.isCompleted = false);
+          }
           this.setTodosList();
 
     },
@@ -180,13 +190,14 @@ created(){
 }
 
 .new-todo{
-    width: 100%;
+    width: 70%;
     height: 50px;
-    border: #111;
-    border-bottom: 2px solid gray;
-    padding: 10px 10px 10px 10px;
+    border: 2px solid gray;
     font-size: 2em;
-    margin-bottom: 40px;
+}
+.add-todo-item {
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 15px;
 }
 
 .todo-outer{
@@ -204,6 +215,6 @@ created(){
     margin :  10px 10px 10px 10px ;
   }
 .todo-completed{
-  text-decoration: line-through;
+    text-decoration: line-through;
 }
 </style>
