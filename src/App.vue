@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="row">
     <div class="col-md-6 todo-outer">
-      <div v-if="errors.length"  class="alert alert-danger">
+      <div v-if="errors && errors.length"  class="alert alert-danger">
             <b>Please correct the following errors:</b>
             <ul>
                 <li v-for="error in errors">{{ error }}</li>
@@ -37,7 +37,7 @@
             <div class= "todo-list-item">
                   <input type="checkbox" value="111" @click="changeAllStatusTodo" v-model="selectAll"> Mark all todos completed
           </div>
-              <div class="text-center" v-show="!todos.length" v-cloak> No item to display </div>
+              <div class="text-center" v-show="!todosItems.length" v-cloak> No item to display </div>
               <div  v-for="todoItem in todosItems" class="list-group">
                 <todo-item :class= "{'list-group-item': !todoItem.isCompleted, 'well well-sm': todoItem.isCompleted}"
                   :todoItem="todoItem"
@@ -53,7 +53,7 @@
                   <div class="col-sm-9">
                         <span>{{ todosItems.length }} items</span>
                   </div>
-                  <div class="col-sm-3" v-show="todos.length && option !== 'Incomplete'" v-cloak>
+                  <div class="col-sm-3" v-show="todosItems.length && option !== 'Incomplete'" v-cloak>
                       <a href="#" @click="clearCompletedTodo()"> Clear completed</a>
                   </div>
               </div>
@@ -72,7 +72,14 @@ export default {
   data () {
     return {
       newTodo: '',
-      todos: [],
+      todos: [
+      {id: 0, text: 'Buy a Pen', isCompleted: true},
+      {id: 1, text: 'Drink milk', isCompleted: true},
+      {id: 2, text: 'goto to cinema', isCompleted: true},
+      {id: 3, text: 'goto to park', isCompleted: false},
+      {id: 4, text: 'call home', isCompleted: false}
+
+      ],
       selectAll: false,
       option:'All',
       errors:[],
@@ -143,7 +150,7 @@ created(){
       },
       getTodosList() {
             var todosItems = [];
-            this.todos = JSON.parse(localStorage.getItem("todos"));
+            this.todos = JSON.parse(localStorage.getItem("todos") || "[]");
             if(this.option == 'Incomplete'){
                     todosItems = this.todos.filter(aTodoItem => aTodoItem.isCompleted == false)
             }else if(this.option=='Completed'){
