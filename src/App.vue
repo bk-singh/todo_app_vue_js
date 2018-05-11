@@ -154,8 +154,10 @@ created(){
       },
       changeTodoStatus(todoItem){
             var index = this.todos.findIndex(aTodo => aTodo.id == todoItem.id);
-            if(index> -1)
+            if(index> -1){
                   this.todos[index].isCompleted = !this.todos[index].isCompleted;
+                  this.checkSelectAll();
+            }
             this.setTodosList();
       },
       getTodosList() {
