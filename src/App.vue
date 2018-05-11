@@ -120,7 +120,7 @@ created(){
   },
   addTodo(){
         if(!this.validateNewTodo()) return false;
-        this.todos.push({id: this.count, text: this.newTodo, isCompleted: false});
+        this.todos.unshift({id: this.count, text: this.newTodo, isCompleted: false});
         this.newTodo = '';
         this.count++;
         this.showAddTodo = false;
